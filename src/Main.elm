@@ -1,25 +1,32 @@
 module Main exposing (..)
 
 import Html exposing (Html, text, div, button)
-import Html.Attributes exposing (class, classList, style)
+import Html.Attributes exposing (class, style)
 import Html.Events exposing (onClick)
 import View.Card
+import View.Flip
 
 
 ---- MODEL ----
 
 
+deck : List Int
 deck =
-    [ 0, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89 ]
+    [ default, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89 ]
+
+
+default : Int
+default =
+    0
 
 
 type alias Model =
-    { current : Maybe String }
+    { current : Maybe String, flip : Bool }
 
 
 init : ( Model, Cmd Msg )
 init =
-    ( { current = Nothing }, Cmd.none )
+    ( { current = Nothing, flip = False }, Cmd.none )
 
 
 
@@ -35,10 +42,10 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         Picked val ->
-            ( { model | current = Just val }, Cmd.none )
+            ( { model | current = Just val, flip = True }, Cmd.none )
 
         Back ->
-            ( { model | current = Nothing }, Cmd.none )
+            ( { model | flip = False }, Cmd.none )
 
 
 
@@ -46,41 +53,29 @@ update msg model =
 
 
 view : Model -> Html Msg
-view { current } =
+view { current, flip } =
     div
         []
         [ button
             [ onClick Back
             , style
-                (if current == Nothing then
-                    [ ( "visibility"
-                      , "hidden"
-                      )
-                    ]
+                (if not flip then
+                    [ ( "visibility", "hidden" ) ]
                  else
                     []
                 )
             ]
             [ text "Back" ]
-        , div
-            [ class "flip-container"
-            , classList [ ( "hover", not (current == Nothing) ) ]
-            ]
-            [ div
-                [ class "flipper" ]
-                [ div
-                    [ class "front" ]
-                    [ div
-                        [ class "deck" ]
-                        (deck
-                            |> List.map toString
-                            |> List.map (\label -> View.Card.view label Picked)
-                        )
-                    ]
-                , div
-                    [ class "back"
-                    ]
-                    [ text (toString current) ]
+        , View.Flip.view
+            flip
+            (deck
+                |> List.map toString
+                |> List.map (\label -> View.Card.view label (Picked label))
+            )
+            [ div [ class "card full" ]
+                [ current
+                    |> Maybe.withDefault (toString default)
+                    |> text
                 ]
             ]
         ]
