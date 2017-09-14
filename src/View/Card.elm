@@ -8,5 +8,5 @@ import Html.Attributes exposing (class)
 view : String -> msg -> Html msg
 view label msg =
     div
-        [ onClick msg, class "card third" ]
+        [ onClick msg, class "card" ]
         [ div [ class "inner" ] [ text label ] ]

@@ -71,11 +71,14 @@ view { current, flip } =
             (deck
                 |> List.map toString
                 |> List.map (\label -> View.Card.view label (Picked label))
+                |> List.map (\v -> div [ class "third" ] [ v ])
             )
-            [ div [ class "card full" ]
-                [ current
-                    |> Maybe.withDefault (toString default)
-                    |> text
+            [ div [ class "full" ]
+                [ div [ class "card" ]
+                    [ current
+                        |> Maybe.withDefault (toString default)
+                        |> text
+                    ]
                 ]
             ]
         ]
