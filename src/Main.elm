@@ -36,6 +36,7 @@ init =
 type Msg
     = Picked String
     | Back
+    | Hide String
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -47,6 +48,9 @@ update msg model =
         Back ->
             ( { model | flip = False }, Cmd.none )
 
+        Hide val ->
+            ( model, Cmd.none )
+
 
 
 ---- VIEW ----
@@ -55,7 +59,7 @@ update msg model =
 view : Model -> Html Msg
 view { current, flip } =
     div
-        []
+        [ class "wrapper" ]
         [ button
             [ onClick Back
             , style
@@ -71,14 +75,12 @@ view { current, flip } =
             (deck
                 |> List.map toString
                 |> List.map (\label -> View.Card.view label (Picked label))
-                |> List.map (\v -> div [ class "third" ] [ v ])
+                |> List.map (\v -> div [ class "third card-wrapper" ] [ v ])
             )
-            [ div [ class "full" ]
-                [ div [ class "card" ]
-                    [ current
-                        |> Maybe.withDefault (toString default)
-                        |> text
-                    ]
+            [ div [ class "full card-wrapper" ]
+                [ current
+                    |> Maybe.withDefault (toString default)
+                    |> \label -> View.Card.view label (Hide label)
                 ]
             ]
         ]
