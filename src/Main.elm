@@ -5,9 +5,7 @@ import Html.Attributes exposing (class, style)
 import Html.Events exposing (onClick)
 import View.Card
 import View.Flip
-
-
----- MODEL ----
+import Util exposing ((=>))
 
 
 deck : List Int
@@ -35,8 +33,8 @@ init =
 
 type Msg
     = Picked String
-    | Back
     | Hide String
+    | Back
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -45,11 +43,11 @@ update msg model =
         Picked val ->
             ( { model | current = Just val, flip = True }, Cmd.none )
 
-        Back ->
-            ( { model | flip = False }, Cmd.none )
-
         Hide val ->
             ( model, Cmd.none )
+
+        Back ->
+            ( { model | flip = False }, Cmd.none )
 
 
 
@@ -59,12 +57,14 @@ update msg model =
 view : Model -> Html Msg
 view { current, flip } =
     div
-        [ class "wrapper" ]
+        [ class "wrapper"
+        , style [ "background" => "#2C3E50" ]
+        ]
         [ button
             [ onClick Back
             , style
                 (if not flip then
-                    [ ( "visibility", "hidden" ) ]
+                    [ "visibility" => "hidden" ]
                  else
                     []
                 )

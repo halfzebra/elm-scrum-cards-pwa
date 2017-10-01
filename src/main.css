@@ -22,6 +22,10 @@ body {
   box-sizing: inherit;
 }
 
+#root {
+  height: 100%;
+}
+
 .deck {
   display: flex;
   flex-wrap: wrap;
@@ -41,9 +45,16 @@ body {
   pointer-events: none;
 }
 
+.foo {
+ color: #2C3E50;
+ color: #E74C3C;
+ color: #ECF0F1;
+ color: #3498DB;
+ color: #2980B9;
+}
+
 .card {
   text-align: center;
-  background-color: cadetblue;
 }
 
 .card-wrapper {
@@ -59,4 +70,5 @@ body {
 
 .wrapper {
   padding: 0 5%;
+  height: 100%;
 }
