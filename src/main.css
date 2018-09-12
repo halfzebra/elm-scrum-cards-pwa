@@ -40,11 +40,6 @@ body {
   width: 100%;
 }
 
-.inner {
-  padding-bottom: 140%;
-  pointer-events: none;
-}
-
 .foo {
  color: #2C3E50;
  color: #E74C3C;
@@ -59,6 +54,19 @@ body {
 
 .card-wrapper {
   padding: 5%;
+}
+
+.card-inner {
+  padding-bottom: 140%;
+  pointer-events: none;
+}
+
+.card-label {
+  font-size: 3em;
+}
+
+.full .card-label {
+  font-size: 8em;
 }
 
 .card-label {
