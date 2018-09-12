@@ -1,11 +1,11 @@
-module Main exposing (..)
+module Main exposing (Model, Msg(..), deck, default, init, main, update, view)
 
-import Html exposing (Html, text, div, button)
+import Browser
+import Html exposing (Html, button, div, text)
 import Html.Attributes exposing (class, style)
 import Html.Events exposing (onClick)
 import View.Card
 import View.Flip
-import Util exposing ((=>))
 
 
 deck : List Int
@@ -58,29 +58,19 @@ view : Model -> Html Msg
 view { current, flip } =
     div
         [ class "wrapper"
-        , style [ "background" => "#2C3E50" ]
+        , style "background" "#2C3E50"
         ]
-        [ button
-            [ onClick Back
-            , style
-                (if not flip then
-                    [ "visibility" => "hidden" ]
-                 else
-                    []
-                )
-            ]
-            [ text "Back" ]
-        , View.Flip.view
+        [ View.Flip.view
             flip
             (deck
-                |> List.map toString
+                |> List.map String.fromInt
                 |> List.map (\label -> View.Card.view label (Picked label))
                 |> List.map (\v -> div [ class "third card-wrapper" ] [ v ])
             )
-            [ div [ class "full card-wrapper" ]
+            [ div [ class "full card-wrapper", onClick Back ]
                 [ current
-                    |> Maybe.withDefault (toString default)
-                    |> \label -> View.Card.view label (Hide label)
+                    |> Maybe.withDefault (String.fromInt default)
+                    |> (\label -> View.Card.view label (Hide label))
                 ]
             ]
         ]
@@ -90,11 +80,10 @@ view { current, flip } =
 ---- PROGRAM ----
 
 
-main : Program Never Model Msg
 main =
-    Html.program
+    Browser.element
         { view = view
-        , init = init
+        , init = \() -> init
         , update = update
         , subscriptions = always Sub.none
         }
